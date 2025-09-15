@@ -1,0 +1,37 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: flink
+---
+apiVersion: flink.apache.org/v1beta1
+kind: FlinkDeployment
+metadata:
+  name: wikimedia-pagecounter
+  namespace: flink
+spec:
+  image: ghcr.io/ssup2-playground/k8s-data-platform_flink-jobs:commit-03befa1c
+  flinkVersion: v1_18
+  serviceAccount: default
+  flinkConfiguration:
+    taskmanager.numberOfTaskSlots: "2"
+  jobManager:
+    resource:
+      cpu: 1
+      memory: "1024m"
+  taskManager:
+    resource:
+      cpu: 1
+      memory: "1024m"
+    replicas: 2
+  job:
+    jarURI: local:///opt/flink/usrlib/mediawiki-page-create-counter.jar
+    entryClass: ssup2.flink.MediaWikiPageCreateCounterJob
+    parallelism: 2
+    upgradeMode: stateless
+    state: running
+  podTemplate:
+    metadata:
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9249"

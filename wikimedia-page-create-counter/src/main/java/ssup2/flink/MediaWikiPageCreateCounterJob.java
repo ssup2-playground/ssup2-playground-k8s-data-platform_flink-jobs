@@ -21,7 +21,7 @@ public class MediaWikiPageCreateCounterJob {
 
         // Define Kafka source using the new KafkaSource API
         KafkaSource<String> source = KafkaSource.<String>builder()
-                .setBootstrapServers("kafka:9092")
+                .setBootstrapServers("kafka.kafka:9092")
                 .setTopics("mediawiki.page-create")
                 .setGroupId("page-create-counter")
                 .setStartingOffsets(OffsetsInitializer.latest())
