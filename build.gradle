@@ -1,3 +1,7 @@
+plugins {
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
+}
+
 ext {
     flinkVersion = '1.18.0'
     flinkKafkaVersion = '3.2.0-1.19'
@@ -15,10 +19,16 @@ allprojects {
 
 subprojects {
     apply plugin: 'java'
+    apply plugin: 'com.github.johnrengelman.shadow'
 
     dependencies {
         implementation "org.apache.flink:flink-streaming-java:${flinkVersion}"
         implementation "org.apache.flink:flink-connector-kafka:${flinkKafkaVersion}"
         implementation "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
+    }
+
+    shadowJar {
+        archiveClassifier.set('all')
+        mergeServiceFiles()
     }
 }
