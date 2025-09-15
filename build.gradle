@@ -26,4 +26,9 @@ subprojects {
         implementation "org.apache.flink:flink-connector-kafka:${flinkKafkaVersion}"
         implementation "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
     }
+
+    shadowJar {
+        archiveClassifier.set('all')
+        mergeServiceFiles()
+    }
 }
