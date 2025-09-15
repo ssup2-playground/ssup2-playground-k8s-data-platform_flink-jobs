@@ -1,0 +1,3 @@
+rootProject.name = 'k8s-data-platform_flink-jobs'
+
+include 'wikimedia-page-create-counter'

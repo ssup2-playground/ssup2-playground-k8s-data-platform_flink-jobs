@@ -1,0 +1,24 @@
+ext {
+    flinkVersion = '1.18.0'
+    flinkKafkaVersion = '3.2.0-1.19'
+    jacksonVersion = '2.15.2'
+}
+
+allprojects {
+    group = 'ssup2.flink'
+    version = '1.0-SNAPSHOT'
+
+    repositories {
+        mavenCentral()
+    }
+}
+
+subprojects {
+    apply plugin: 'java'
+
+    dependencies {
+        implementation "org.apache.flink:flink-streaming-java:${flinkVersion}"
+        implementation "org.apache.flink:flink-connector-kafka:${flinkKafkaVersion}"
+        implementation "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
+    }
+}
