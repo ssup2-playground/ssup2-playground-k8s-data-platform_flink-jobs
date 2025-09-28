@@ -20,7 +20,7 @@ public class MediaWikiPageCreateCounterJob {
         // Setup Flink execution environment
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
 
-        // Kafka 인증을 위한 Properties 설정
+        // Set Kafka properties
         Properties kafkaProps = new Properties();
         kafkaProps.setProperty("security.protocol", "SASL_PLAINTEXT");
         kafkaProps.setProperty("sasl.mechanism", "PLAIN");
