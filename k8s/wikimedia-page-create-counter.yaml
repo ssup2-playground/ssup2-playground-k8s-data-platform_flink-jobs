@@ -10,7 +10,7 @@ metadata:
   name: wikimedia-pagecounter
   namespace: flink
 spec:
-  image: ghcr.io/ssup2-playground/k8s-data-platform_flink-jobs:commit-03befa1c
+  image: ghcr.io/ssup2-playground/k8s-data-platform_flink-jobs:commit-3fb7f0ae
   flinkVersion: v1_18
   serviceAccount: default
   flinkConfiguration:
