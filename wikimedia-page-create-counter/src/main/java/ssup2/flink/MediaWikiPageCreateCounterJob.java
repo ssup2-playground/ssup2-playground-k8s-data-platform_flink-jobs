@@ -13,11 +13,20 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.time.Instant;
+import java.util.Properties;
 
 public class MediaWikiPageCreateCounterJob {
     public static void main(String[] args) throws Exception {
         // Setup Flink execution environment
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+
+        // Kafka 인증을 위한 Properties 설정
+        Properties kafkaProps = new Properties();
+        kafkaProps.setProperty("security.protocol", "SASL_PLAINTEXT");
+        kafkaProps.setProperty("sasl.mechanism", "PLAIN");
+        kafkaProps.setProperty("sasl.jaas.config", 
+                "org.apache.kafka.common.security.plain.PlainLoginModule required " +
+                "username=\"user\" password=\"user\";");
 
         // Define Kafka source using the new KafkaSource API
         KafkaSource<String> source = KafkaSource.<String>builder()
@@ -26,6 +35,7 @@ public class MediaWikiPageCreateCounterJob {
                 .setGroupId("page-create-counter")
                 .setStartingOffsets(OffsetsInitializer.latest())
                 .setValueOnlyDeserializer(new SimpleStringSchema())
+                .setProperties(kafkaProps)
                 .build();
 
         // Create a stream from Kafka source
