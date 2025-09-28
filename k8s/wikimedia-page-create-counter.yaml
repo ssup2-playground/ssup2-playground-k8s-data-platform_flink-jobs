@@ -1,20 +1,16 @@
 ---
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: flink
----
 apiVersion: flink.apache.org/v1beta1
 kind: FlinkDeployment
 metadata:
   name: wikimedia-pagecounter
-  namespace: flink
+  namespace: flink-kubernetes-operator
 spec:
-  image: ghcr.io/ssup2-playground/k8s-data-platform_flink-jobs:commit-3fb7f0ae
+  image: ghcr.io/ssup2-playground/k8s-data-platform_flink-jobs:commit-98cdfdeb
   flinkVersion: v1_18
-  serviceAccount: default
+  serviceAccount: flink
   flinkConfiguration:
     taskmanager.numberOfTaskSlots: "2"
+    kubernetes.rest-service.exposed.type: LoadBalancer
   jobManager:
     resource:
       cpu: 1
