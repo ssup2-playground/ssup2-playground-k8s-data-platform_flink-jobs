@@ -1,3 +1,7 @@
+plugins {
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
+}
+
 ext {
     flinkVersion = '1.18.0'
     flinkKafkaVersion = '3.2.0-1.19'
@@ -6,7 +10,7 @@ ext {
 
 allprojects {
     group = 'ssup2.flink'
-    version = '1.0-SNAPSHOT'
+    version = '1.0'
 
     repositories {
         mavenCentral()
@@ -15,6 +19,7 @@ allprojects {
 
 subprojects {
     apply plugin: 'java'
+    apply plugin: 'com.github.johnrengelman.shadow'
 
     dependencies {
         implementation "org.apache.flink:flink-streaming-java:${flinkVersion}"

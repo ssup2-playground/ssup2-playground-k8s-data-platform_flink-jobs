@@ -1,4 +1,4 @@
-FROM gradle:8.7-jdk17 AS builder
+FROM gradle:8.14.3-jdk11 AS builder
 WORKDIR /workspace
 
 COPY settings.gradle build.gradle ./
@@ -11,7 +11,7 @@ COPY mediawiki-pagecounter-job/src mediawiki-pagecounter-job/src
 
 RUN gradle --no-daemon :mediawiki-pagecounter-job:shadowJar
 
-FROM flink:1.18-java17
+FROM flink:1.18-java11
 WORKDIR /opt/flink
 COPY --from=builder /workspace/mediawiki-pagecounter-job/build/libs/mediawiki-pagecounter-job-*-all.jar \
      /opt/flink/usrlib/mediawiki-pagecounter-job.jar

@@ -1,2 +1,5 @@
-// Dependencies are inherited from parent build.gradle
-// This file is required for the subproject to be recognized by Gradle
+shadowJar {
+    manifest {
+        attributes 'Main-Class': 'ssup2.flink.MediaWikiPageCreateCounterJob'
+    }
+}
