@@ -9,10 +9,10 @@ RUN chmod +x gradlew
 ## Copy gradle configs
 COPY gradle gradle
 COPY build.gradle settings.gradle .
-COPY mediawiki-pagecounter-job/build.gradle mediawiki-pagecounter-job/
+COPY wikimedia-page-create-counter/build.gradle wikimedia-page-create-counter/
 
 ## Copy source code
-COPY mediawiki-pagecounter-job/src mediawiki-pagecounter-job/src
+COPY wikimedia-page-create-counter/src wikimedia-page-create-counter/src
 
 ## Build
 RUN ./gradlew --no-daemon --parallel --build-cache :wikimedia-page-create-counter:shadowJar
@@ -23,5 +23,5 @@ WORKDIR /opt/flink
 
 ## Run
 ENV FLINK_ENV_JAVA_OPTS="--add-opens java.base/java.lang=ALL-UNNAMED --add-opens java.base/java.util=ALL-UNNAMED"
-COPY --from=builder /app/mediawiki-pagecounter-job/build/libs/mediawiki-pagecounter-job-*-all.jar \
-     /opt/flink/usrlib/mediawiki-pagecounter-job.jar
+COPY --from=builder /app/wikimedia-page-create-counter/build/libs/wikimedia-page-create-counter-*-all.jar \
+     /opt/flink/usrlib/wikimedia-page-create-counter.jar
