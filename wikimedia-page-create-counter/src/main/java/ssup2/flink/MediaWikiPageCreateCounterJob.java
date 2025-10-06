@@ -5,7 +5,6 @@ import org.apache.flink.api.common.serialization.SimpleStringSchema;
 import org.apache.flink.api.common.restartstrategy.RestartStrategies;
 import org.apache.flink.connector.kafka.source.KafkaSource;
 import org.apache.flink.connector.kafka.source.enumerator.initializer.OffsetsInitializer;
-import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.CheckpointingMode;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.CheckpointConfig;
@@ -21,18 +20,15 @@ import java.util.Properties;
 
 public class MediaWikiPageCreateCounterJob {
     
+    private static final String KAFKA_SERVERS = System.getenv().getOrDefault("KAFKA_SERVERS", "kafka.kafka:9092");
+    private static final String KAFKA_USERNAME = System.getenv().getOrDefault("KAFKA_USERNAME", "user");
+    private static final String KAFKA_PASSWORD = System.getenv().getOrDefault("KAFKA_PASSWORD", "user");
+
     private static final ObjectMapper mapper = new ObjectMapper();
     
     public static void main(String[] args) throws Exception {
-        // Set S3 configuration for Flink checkpoint storage
-        Configuration conf = new Configuration();
-        conf.setString("s3.access-key", System.getenv().getOrDefault("AWS_ACCESS_KEY_ID", "root"));
-        conf.setString("s3.secret-key", System.getenv().getOrDefault("AWS_SECRET_ACCESS_KEY", "root123!"));
-        conf.setString("s3.endpoint", System.getenv().getOrDefault("AWS_ENDPOINT", "minio.minio:9000"));
-        conf.setBoolean("s3.path.style.access", true);
-
         // Set Flink execution environment
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment(conf);
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         env.enableCheckpointing(10000, CheckpointingMode.EXACTLY_ONCE);
         env.getCheckpointConfig().setMinPauseBetweenCheckpoints(5000);
         env.getCheckpointConfig().setCheckpointTimeout(6000);
@@ -49,11 +45,11 @@ public class MediaWikiPageCreateCounterJob {
         kafkaProps.setProperty("sasl.mechanism", "PLAIN");
         kafkaProps.setProperty("sasl.jaas.config", 
             "org.apache.kafka.common.security.plain.PlainLoginModule required " +
-            "username=\"user\" password=\"user\";");
+            "username=\"" + KAFKA_USERNAME + "\" password=\"" + KAFKA_PASSWORD + "\";");
 
         // Define Kafka source using the new KafkaSource API
         KafkaSource<String> source = KafkaSource.<String>builder()
-            .setBootstrapServers("kafka.kafka:9092")
+            .setBootstrapServers(KAFKA_SERVERS)
             .setTopics("mediawiki.page-create")
             .setGroupId("page-create-counter")
             .setStartingOffsets(OffsetsInitializer.latest())
