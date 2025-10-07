@@ -20,7 +20,7 @@ import java.util.Properties;
 
 public class MediaWikiPageCreateCounterJob {
     
-    private static final String KAFKA_SERVERS = System.getenv().getOrDefault("KAFKA_SERVERS", "kafka.kafka:9092");
+    private static final String KAFKA_BOOTSTRAP_SERVERS = System.getenv().getOrDefault("KAFKA_BOOTSTRAP_SERVERS", "kafka.kafka:9092");
     private static final String KAFKA_USERNAME = System.getenv().getOrDefault("KAFKA_USERNAME", "user");
     private static final String KAFKA_PASSWORD = System.getenv().getOrDefault("KAFKA_PASSWORD", "user");
 
@@ -49,7 +49,7 @@ public class MediaWikiPageCreateCounterJob {
 
         // Define Kafka source using the new KafkaSource API
         KafkaSource<String> source = KafkaSource.<String>builder()
-            .setBootstrapServers(KAFKA_SERVERS)
+            .setBootstrapServers(KAFKA_BOOTSTRAP_SERVERS)
             .setTopics("mediawiki.page-create")
             .setGroupId("page-create-counter")
             .setStartingOffsets(OffsetsInitializer.latest())
